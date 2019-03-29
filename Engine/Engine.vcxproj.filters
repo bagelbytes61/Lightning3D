@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Include">
+      <UniqueIdentifier>{ddc8eacc-4d5a-4395-aa9c-1d5e152db2c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{d2e7d76c-3925-4f03-bcb3-c83f1ad7448b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Windows">
+      <UniqueIdentifier>{933b9a1c-4c32-411f-8b05-ea8f068e2ac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Windows">
+      <UniqueIdentifier>{69423275-d619-4c07-bfdc-e39fab99e3c3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\LEEngine.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LEMain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LEGame.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LEKeyboard.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\LEWindowsApplication.cpp">
+      <Filter>Source\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\LEWindowsWindow.cpp">
+      <Filter>Source\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LEPlatformWindow.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LEPlatformApplication.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LEPlatformTime.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\LEWindowsTime.cpp">
+      <Filter>Source\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LEPlatformFileSystem.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\LEWindowsFileSystem.cpp">
+      <Filter>Source\Windows</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\LEEngine.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEGame.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEKeycodes.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEInputBuffer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Windows\LEWindowsApplication.h">
+      <Filter>Include\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEInputModifier.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Windows\LEWindowsWindow.h">
+      <Filter>Include\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEPlatformTime.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEPlatformWindow.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEPlatformApplication.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEPlatformApplicationMessageHandler.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEPlatformWindowDescription.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEPlatformFileSystem.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Windows\LEWindowsTime.h">
+      <Filter>Include\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LEPlatformFile.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Windows\LEWindowsFileSystem.h">
+      <Filter>Include\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Windows\LEWindowsFile.h">
+      <Filter>Include\Windows</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

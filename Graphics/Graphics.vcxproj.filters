@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Include">
+      <UniqueIdentifier>{6778eb74-56f8-4f4d-a23a-2518119ebeaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{6b3c8bc0-b1d7-4336-9453-1ed0fc9de8da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\DirectX11">
+      <UniqueIdentifier>{67e90bc2-9db4-491b-ac48-f03e087cc4e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\DirectX11">
+      <UniqueIdentifier>{b392794a-5293-4870-9035-f24b4dbf16d7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\DirectX11\LGDirectX11IndexBuffer.h">
+      <Filter>Include\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\DirectX11\LGDirectX11VertexBuffer.h">
+      <Filter>Include\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGVertexBuffer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGVertexBufferBase.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\DirectX11\LGDirectX11Graphics.h">
+      <Filter>Include\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGClearFlag.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\DirectX11\LGDirectX11ClearFlag.h">
+      <Filter>Include\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGObjectBase.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGResourceBase.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGGraphics.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGObject.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGResource.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGIndexBuffer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\DirectX11\LGDirectX11IndexBuffer.cpp">
+      <Filter>Source\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DirectX11\LGDirectX11VertexBuffer.cpp">
+      <Filter>Source\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LGIndexBufferBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LGVertexBufferBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DirectX11\LGDirectX11Graphics.cpp">
+      <Filter>Source\DirectX11</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
