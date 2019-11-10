@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-using namespace Lightning3D::Engine;
+using namespace Lightning3D;
 
 #if defined (LE_WINDOWS)
 #include "Windows/LEWindowsApplication.h"
@@ -50,11 +50,15 @@ PlatformApplication::~PlatformApplication() {
 
 }
 
-bool PlatformApplication::OnKeyDown(int32_t keyCode, uint32_t charCode, InputModifier modifiers, bool repeat) {
+bool PlatformApplication::OnKeyDown(int32_t keyCode, uint32_t scanCode, InputModifier modifiers, bool repeat) {
+    //std::cout << keyCode << ' ' << scanCode << '\n';
+
     return false;
 }
 
-bool PlatformApplication::OnKeyUp(int32_t keyCode, uint32_t charCode, InputModifier modifiers) {
+bool PlatformApplication::OnKeyUp(int32_t keyCode, uint32_t scanCode, InputModifier modifiers) {
+    //std::cout << keyCode << ' ' << scanCode << '\n';
+
     return false;
 }
 

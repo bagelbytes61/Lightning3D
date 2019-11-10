@@ -5,7 +5,7 @@
 
 #include <cstdint>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     struct PlatformWindowDescription {
         uint32_t windowedWidth;
         uint32_t windowedHeight;

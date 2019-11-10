@@ -7,7 +7,7 @@
 
 #include <Windows.h>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     enum struct LE_KEYCODE : uint32_t {
         LE_KC_BACK              = VK_BACK,
         LE_KC_TAB               = VK_TAB,

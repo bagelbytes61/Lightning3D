@@ -1,6 +1,6 @@
 #include "LEPlatformTime.h"
 
-using namespace Lightning3D::Engine;
+using namespace Lightning3D;
 
 #if defined (LE_WINDOWS)
 #include "Windows/LEWindowsTime.h"
@@ -56,7 +56,7 @@ uint64_t PlatformTime::GetElapsedCycles() {
 //
 //#include <ctime>
 //
-//using namespace Lightning3D::Engine;
+//using namespace Lightning3D;
 //
 //CTime::CTime() 
 //    : m_ui64Resolution(0ULL)

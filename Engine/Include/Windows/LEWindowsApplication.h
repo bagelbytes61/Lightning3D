@@ -11,7 +11,7 @@
 
 #include <Windows.h>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
 
     class WindowsApplication : public PlatformApplication {
     public:

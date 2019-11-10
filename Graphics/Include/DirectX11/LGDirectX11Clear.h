@@ -3,11 +3,14 @@
 
 #pragma once
 
-#include "LGClearFlag.h"
+#include "LGClear.h"
 
 #include <d3d11.h>
 
-namespace Lightning3D::Graphics {
+#include <unordered_map>
+
+namespace Lightning3D {
+
 }
 
 #endif

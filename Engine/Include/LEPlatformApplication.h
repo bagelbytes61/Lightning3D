@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <memory>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     class PlatformWindow;
 
     class PlatformApplication : public PlatformApplicationMessageHandler {
@@ -26,9 +26,9 @@ namespace Lightning3D::Engine {
     protected:
 
     private:
-        virtual bool OnKeyDown(int32_t keyCode, uint32_t charCode, InputModifier modifiers, bool repeat) override final;
+        virtual bool OnKeyDown(int32_t keyCode, uint32_t scanCode, InputModifier modifiers, bool repeat) override final;
 
-        virtual bool OnKeyUp(int32_t keyCode, uint32_t charCode, InputModifier modifiers) override final;
+        virtual bool OnKeyUp(int32_t keyCode, uint32_t scanCode, InputModifier modifiers) override final;
                                                                                                     
         virtual bool OnMouseDown(MouseButton button, int32_t x, int32_t y, InputModifier modifiers) override final;
 

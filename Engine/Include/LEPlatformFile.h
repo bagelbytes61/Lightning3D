@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     class PlatformFile {
     public:
 

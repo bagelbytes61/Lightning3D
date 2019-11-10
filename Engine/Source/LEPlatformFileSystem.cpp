@@ -1,3 +1,3 @@
 #include "LEPlatformFileSystem.h"
 
-using namespace Lightning3D::Engine;
+using namespace Lightning3D;

@@ -2,7 +2,7 @@
 
 #include "LEPlatformWindowDescription.h"
 
-using namespace Lightning3D::Engine;
+using namespace Lightning3D;
 
 PlatformWindow::~PlatformWindow() {
 

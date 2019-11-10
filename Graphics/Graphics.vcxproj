@@ -40,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -146,26 +146,41 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Include\DirectX11\LGDirectX11ClearFlag.h" />
+    <ClInclude Include="Include\DirectX11\LGDirectX11RenderTarget.h" />
+    <ClInclude Include="Include\DirectX11\LGDirectX11Texture2D.h" />
+    <ClInclude Include="Include\DirectX11\LGDirectX11VertexLayout.h" />
+    <ClInclude Include="Include\DirectX11\LGDirectX11Clear.h" />
     <ClInclude Include="Include\DirectX11\LGDirectX11Graphics.h" />
     <ClInclude Include="Include\DirectX11\LGDirectX11IndexBuffer.h" />
-    <ClInclude Include="Include\LGClearFlag.h" />
+    <ClInclude Include="Include\DirectX11\LGDirectX11PipelineState.h" />
+    <ClInclude Include="Include\LGBuffer.h" />
+    <ClInclude Include="Include\LGClear.h" />
     <ClInclude Include="Include\LGGraphics.h" />
     <ClInclude Include="Include\LGIndexBuffer.h" />
     <ClInclude Include="Include\LGObject.h" />
+    <ClInclude Include="Include\LGRenderTarget.h" />
     <ClInclude Include="Include\LGResource.h" />
-    <ClInclude Include="Include\LGObjectBase.h" />
-    <ClInclude Include="Include\LGResourceBase.h" />
+    <ClInclude Include="Include\LGTexture.h" />
+    <ClInclude Include="Include\LGTopology.h" />
+    <ClInclude Include="Include\LGUniformBuffer.h" />
+    <ClInclude Include="Include\LGUsage.h" />
     <ClInclude Include="Include\LGVertexBuffer.h" />
-    <ClInclude Include="Include\LGVertexBufferBase.h" />
     <ClInclude Include="Include\DirectX11\LGDirectX11VertexBuffer.h" />
+    <ClInclude Include="Include\LGPipelineState.h" />
+    <ClInclude Include="Include\LGVertexLayout.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Include\DirectX11\LGDirectX11Usage.h" />
+    <ClCompile Include="Source\DirectX11\LGDirectX11PipelineState.cpp" />
+    <ClCompile Include="Source\DirectX11\LGDirectX11RenderTarget.cpp" />
+    <ClCompile Include="Source\LGBuffer.cpp" />
     <ClCompile Include="Source\DirectX11\LGDirectX11Graphics.cpp" />
     <ClCompile Include="Source\DirectX11\LGDirectX11VertexBuffer.cpp" />
     <ClCompile Include="Source\DirectX11\LGDirectX11IndexBuffer.cpp" />
-    <ClCompile Include="Source\LGIndexBufferBase.cpp" />
-    <ClCompile Include="Source\LGVertexBufferBase.cpp" />
+    <ClCompile Include="Source\LGGraphics.cpp" />
+    <ClCompile Include="Source\LGIndexBuffer.cpp" />
+    <ClCompile Include="Source\LGUniformBuffer.cpp" />
+    <ClCompile Include="Source\LGVertexBuffer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

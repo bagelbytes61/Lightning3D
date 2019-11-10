@@ -5,7 +5,7 @@
 
 #include "LEPlatformFileSystem.h"
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     class WindowsFileSystem : public PlatformFileSystem {
     public:
         static void CreateDirectory(const char* path);

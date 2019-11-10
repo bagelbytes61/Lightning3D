@@ -9,13 +9,13 @@
 
 #include <Windows.h>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     class WindowsApplication;
 
     class WindowsWindow : public PlatformWindow {
     public:
         WindowsWindow(WindowsApplication* application, std::shared_ptr<PlatformWindowDescription> description, HINSTANCE hInstance, LPCSTR className);
-        virtual ~WindowsWindow()    override final;
+        virtual ~WindowsWindow() override final;
 
         virtual Handle  GetHandle() const override final;
 

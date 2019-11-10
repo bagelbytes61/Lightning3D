@@ -4,7 +4,7 @@
 
 #include <cassert>
 
-using namespace Lightning3D::Engine;
+using namespace Lightning3D;
 
 WindowsWindow::WindowsWindow(WindowsApplication* application, std::shared_ptr<PlatformWindowDescription> description, HINSTANCE hInstance, LPCSTR className)
     : m_hWnd(nullptr)

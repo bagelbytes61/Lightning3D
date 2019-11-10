@@ -6,7 +6,7 @@
 
 #include "Windows/LEWindowsWindow.h"
 
-using namespace Lightning3D::Engine;
+using namespace Lightning3D;
 
 static InputModifier GetActiveInputModifiers() {
     InputModifier modifiers = InputModifier::None;
@@ -99,18 +99,16 @@ LRESULT CALLBACK WindowsApplication::MessageRouter(HWND hWnd, UINT msg, WPARAM w
 
 LRESULT CALLBACK WindowsApplication::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
-        case WM_CLOSE:
+        case WM_CLOSE: {
             m_messageHandler->OnWindowClose();
             break;
-
+        }
         case WM_KEYDOWN: {
-            m_messageHandler->OnKeyDown(wParam, ::MapVirtualKey(wParam, MAPVK_VK_TO_CHAR), GetActiveInputModifiers(), (lParam & 0x4000000));
-
+            m_messageHandler->OnKeyDown(wParam, ::MapVirtualKey(wParam, MAPVK_VK_TO_VSC), GetActiveInputModifiers(), (lParam & 0x4000000));
             break;
         }
         case WM_KEYUP: {
-            m_messageHandler->OnKeyUp(wParam, ::MapVirtualKey(wParam, MAPVK_VK_TO_CHAR), GetActiveInputModifiers());
-
+            m_messageHandler->OnKeyUp(wParam, ::MapVirtualKey(wParam, MAPVK_VK_TO_VSC), GetActiveInputModifiers());
             break;
         }
         case WM_MOUSEMOVE: {
@@ -118,7 +116,6 @@ LRESULT CALLBACK WindowsApplication::MessageHandler(HWND hWnd, UINT msg, WPARAM 
             int32_t positionY = HIWORD(lParam);
 
             m_messageHandler->OnMouseMove(positionX, positionY, GetActiveInputModifiers());
-
             break;
         }
         case WM_LBUTTONDOWN:
@@ -163,7 +160,6 @@ LRESULT CALLBACK WindowsApplication::MessageHandler(HWND hWnd, UINT msg, WPARAM 
                     break;
                 }
             }
-
             break;
         }
 

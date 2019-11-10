@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <type_traits>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     enum struct InputModifier : uint32_t {
         None = 0,
 

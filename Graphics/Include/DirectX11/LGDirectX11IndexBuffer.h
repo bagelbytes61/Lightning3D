@@ -3,25 +3,23 @@
 
 #pragma once
 
-//#include "LGIIndexBuffer.h"
+#include "LGIndexBuffer.h"
 
 #include <d3d11.h>
 
 #include <atlbase.h>
 
-//namespace Lightning3D::Graphics {
-//    class DirectX11IndexBuffer : public IIndexBuffer {
-//    public:
-//        DirectX11IndexBuffer(uint32_t indexSize, uint32_t indexCount, uint32_t topology, uint32_t usage);
-//        ~DirectX11IndexBuffer();
-//
-//
-//
-//    private:
-//        CComPtr<ID3D11Buffer> m_resource;
-//
-//        DXGI_FORMAT           m_format;
-//    };
-//}
+namespace Lightning3D {
+    class DirectX11IndexBuffer : public IndexBuffer {
+        friend class DirectX11Graphics;
+
+    public:
+        DirectX11IndexBuffer(ID3D11Buffer* resource, uint32_t size, uint32_t count, /*uint32_t topology, */Usage usage);
+        virtual ~DirectX11IndexBuffer() override final;
+
+    private:
+        CComPtr<ID3D11Buffer> m_resource;
+    };
+}
 
 #endif

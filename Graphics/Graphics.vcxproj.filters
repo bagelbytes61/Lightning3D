@@ -21,26 +21,8 @@
     <ClInclude Include="Include\DirectX11\LGDirectX11VertexBuffer.h">
       <Filter>Include\DirectX11</Filter>
     </ClInclude>
-    <ClInclude Include="Include\LGVertexBuffer.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\LGVertexBufferBase.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\DirectX11\LGDirectX11Graphics.h">
       <Filter>Include\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\LGClearFlag.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\DirectX11\LGDirectX11ClearFlag.h">
-      <Filter>Include\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\LGObjectBase.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\LGResourceBase.h">
-      <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\LGGraphics.h">
       <Filter>Include</Filter>
@@ -54,6 +36,51 @@
     <ClInclude Include="Include\LGIndexBuffer.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\LGVertexBuffer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGUsage.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGClear.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGUniformBuffer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGTopology.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\DirectX11\LGDirectX11Clear.h">
+      <Filter>Include\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\DirectX11\LGDirectX11PipelineState.h">
+      <Filter>Include\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGPipelineState.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGBuffer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGVertexLayout.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\DirectX11\LGDirectX11VertexLayout.h">
+      <Filter>Include\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGRenderTarget.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\DirectX11\LGDirectX11RenderTarget.h">
+      <Filter>Include\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\DirectX11\LGDirectX11Texture2D.h">
+      <Filter>Include\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LGTexture.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DirectX11\LGDirectX11IndexBuffer.cpp">
@@ -62,13 +89,31 @@
     <ClCompile Include="Source\DirectX11\LGDirectX11VertexBuffer.cpp">
       <Filter>Source\DirectX11</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LGIndexBufferBase.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LGVertexBufferBase.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\DirectX11\LGDirectX11Graphics.cpp">
+      <Filter>Source\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LGIndexBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LGVertexBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\DirectX11\LGDirectX11Usage.h">
+      <Filter>Include\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LGUniformBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LGBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LGGraphics.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DirectX11\LGDirectX11PipelineState.cpp">
+      <Filter>Source\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DirectX11\LGDirectX11RenderTarget.cpp">
       <Filter>Source\DirectX11</Filter>
     </ClCompile>
   </ItemGroup>

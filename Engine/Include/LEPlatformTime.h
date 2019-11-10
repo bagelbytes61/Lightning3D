@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <memory>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     class PlatformTime {
     public:
         static void Initialize();
@@ -20,7 +20,7 @@ namespace Lightning3D::Engine {
         static uint64_t GetElapsedCycles();
 
     protected:
-       inline static uint64_t s_resolution;
+       inline static uint64_t s_frequency;
     };
 }
 

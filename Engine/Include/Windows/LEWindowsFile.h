@@ -5,7 +5,7 @@
 
 #include "LEPlatformFile.h"
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     class WindowsFile : public PlatformFile {
 
     };

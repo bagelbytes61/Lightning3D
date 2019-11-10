@@ -1,14 +1,9 @@
 #include "LEEngine.h"
 #include "LEGame.h"
 
-#include "DirectX11/LGDirectX11IndexBuffer.h"
-
 #include <stdexcept>
 
-using namespace Lightning3D::Engine;
-//using namespace Lightning3D::Graphics;
-
-
+using namespace Lightning3D;
 
 int main(int argc, char* argv[]) try {
         Engine::Run();

@@ -7,7 +7,7 @@
 
 #include "LEInputModifier.h"
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     enum struct MouseButton : uint32_t {
         None,
 

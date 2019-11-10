@@ -5,14 +5,14 @@
 
 #include <memory>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     using Handle = void*;
 
     class PlatformWindow {
     public:
         virtual ~PlatformWindow()  = 0;
 
-        virtual Handle  GetHandle() const = 0;
+        virtual Handle GetHandle() const = 0;
 
     protected:
         PlatformWindow(std::shared_ptr<struct PlatformWindowDescription> description);

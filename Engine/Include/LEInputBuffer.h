@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     class InputBuffer {
 
     };

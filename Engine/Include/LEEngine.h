@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     class Engine {
         friend class PlatformApplication;
     public:
@@ -15,8 +15,8 @@ namespace Lightning3D::Engine {
         static inline bool s_running = true;
 
         static std::shared_ptr<class PlatformApplication>  s_application;
-
         static std::shared_ptr<class PlatformWindow> s_window;
+        static std::shared_ptr<class Graphics> s_graphics;
     };
 }
 

@@ -1,28 +1,39 @@
-#ifndef LG_IINDEX_BUFFER_H_
-#define LG_IINDEX_BUFFER_H_
+#ifndef LG_INDEX_BUFFER_H_
+#define LG_INDEX_BUFFER_H_
 
 #pragma once
 
-#include "LGResource.h"
+#include "LGBuffer.h"
 
+#include <cstddef>
 #include <cstdint>
+#include <vector>
 
-namespace Lightning3D::Graphics {
-    class IndexBuffer : public Resource {
+namespace Lightning3D {
+    class IndexBuffer : public Buffer {
     public:
         virtual ~IndexBuffer() override;
 
-        virtual uint32_t GetIndexSize() const = 0;
+        uint32_t GetIndexSize() const;
 
-        virtual uint32_t GetIndexCount() const = 0;
+        uint32_t GetIndexCount() const;
 
-        virtual uint32_t GetPrimitiveCount() const = 0;
+    protected:
+        IndexBuffer(uint32_t size, uint32_t count, Usage usage);
 
-        virtual uint32_t GetTopology() const = 0;
+    private:
+        uint32_t m_size;
+
+        uint32_t m_count;
+
     };
 
-    inline IndexBuffer::~IndexBuffer() {
+    inline uint32_t IndexBuffer::GetIndexSize() const {
+        return m_size;
+    }
 
+    inline uint32_t IndexBuffer::GetIndexCount() const {
+        return m_count;
     }
 }
 

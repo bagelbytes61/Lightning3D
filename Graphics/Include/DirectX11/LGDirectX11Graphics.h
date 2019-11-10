@@ -3,7 +3,7 @@
 
 #pragma once#
 
-//#include "LGGraphics.h"
+#include "LGGraphics.h"
 
 #include <d3d11.h>
 #include <dxgi.h>
@@ -14,54 +14,46 @@
 #include <atlbase.h>
 #include <cstdint>
 
-namespace Lightning3D::Graphics {
-    //class DirectX11Graphics : public Graphics {
-    //public:
-    //    DirectX11Graphics();
-    //    virtual ~DirectX11Graphics() override final;
+namespace Lightning3D {
+    class DirectX11Graphics : public Graphics {
+    public:
+        DirectX11Graphics(Handle winHandle, uint32_t width, uint32_t height, bool windowed);
+        virtual ~DirectX11Graphics() override;
 
-    //    virtual void Clear(ClearFlag flags) override final;
+        virtual VertexBuffer  *CreateVertexBuffer(uint32_t size, uint32_t count, Usage usage, void *initialData) override final;
+        virtual IndexBuffer   *CreateIndexBuffer(uint32_t size, uint32_t count, Usage usage, void *initialData) override final;
+        virtual UniformBuffer *CreateUniformBuffer(uint32_t size, Usage usage, void *initialData) override final;
 
-    //    virtual void Present() override final;
+        virtual Texture1D *CreateTexture1D(uint32_t width, Usage usage) override final;
+        virtual Texture2D *CreateTexture2D(uint32_t width, uint32_t height, Usage usage) override final;
+        virtual Texture3D *CreateTexture3D(uint32_t width, uint32_t height, uint32_t depth, Usage usage) override final;
 
-    //private:
-    //    CComPtr<ID3D11Device> m_device;
+        virtual DepthStencil *CreateDepthStencil(Texture2D *texture) override final;
+        virtual RenderTarget *CreateRenderTarget(Texture2D *texture) override final;
 
-    //    CComPtr<ID3D11DeviceContext> m_deviceContext;
+        virtual PipelineState *CreatePipelineState(PipelineStateDescription &&description) override final;
 
-    //    CComPtr<IDXGISwapChain> m_swapChain;
+        virtual void Draw(Topology topology, uint32_t startVertex, uint32_t vertexCount) override final;
+        virtual void Draw(Topology topology, uint32_t baseVertex, uint32_t startIndex, uint32_t indexCount) override final;
 
-    //    CComPtr<ID3D11RenderTargetView>  m_renderTarget;
+        virtual void ClearDepthStencil(DepthStencil *stencil) override final;
+        virtual void ClearRenderTarget(RenderTarget *target) override final;
 
-    //    CComPtr<ID3D11DepthStencilView>  m_depthStencil;
-    //};
+        virtual void Present() override final;
 
-    //inline void DirectX11Graphics::Clear(uint32_t _ui32Flags) {
-    //    if (_ui32Flags & LG_CLEAR_COLOR) {
-    //        const FLOAT fColor[4] = {
-    //            0.0f,
-    //            0.0f,
-    //            0.0f,
-    //            1.0f
-    //        };
+    private:
+        CComPtr<ID3D11Device> m_device;
 
-    //        s_pDeviceContext->ClearRenderTargetView(s_pRenderTarget, fColor);
-    //    }
+        CComPtr<ID3D11DeviceContext> m_deviceContext;
 
-    //    s_pDeviceContext->ClearDepthStencilView(s_pDepthStencil, _ui32Flags & (LG_CLEAR_DEPTH | LG_CLEAR_STENCIL), 1.0f, 0);
-    //}
+        CComPtr<IDXGISwapChain> m_swapChain;
 
-    //inline void DirectX11Graphics::Present() {
-    //    s_pSwapChain->Present(0, 0);
-    //}
+        CComPtr<ID3D11RenderTargetView>  m_renderTarget;
 
-    //inline ID3D11Device* DirectX11Graphics::GetDevice() {
-    //    return s_pDevice;
-    //}
+        CComPtr<ID3D11DepthStencilView>  m_depthStencil;
+    };
 
-    //inline ID3D11DeviceContext* DirectX11Graphics::GetDeviceContext() {
-    //    return s_pDeviceContext;
-    //}
+
 }
 
 #endif

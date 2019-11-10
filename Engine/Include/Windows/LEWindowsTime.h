@@ -9,7 +9,7 @@
 
 #include <Windows.h>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     class WindowsTime : public PlatformTime {
     public:
         static void Initialize();

@@ -2,7 +2,7 @@
 //
 //#include "LEKeyboard.h"
 //
-//using namespace Lightning3D::Engine;
+//using namespace Lightning3D;
 //
 //CKeyboard::CKeyboard(CInputBuffer* _pibBuffer) 
 //    : m_pibBuffer(_pibBuffer) {

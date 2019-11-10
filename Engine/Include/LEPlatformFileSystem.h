@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace Lightning3D::Engine {
+namespace Lightning3D {
     class PlatformFileSystem {
     public:
         static void CreateDirectory(const char* path);
