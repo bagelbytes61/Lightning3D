@@ -14,10 +14,10 @@ WindowsWindow::WindowsWindow(WindowsApp *app, const WindowDesc &desc)
 
     AdjustWindowRectEx(&clientArea, WS_OVERLAPPEDWINDOW, false, WS_EX_CLIENTEDGE);
 
-    const auto adjustedWith = clientArea.right - clientArea.left;
+    const auto adjustedWidth = clientArea.right - clientArea.left;
     const auto adjustedHeight = clientArea.bottom - clientArea.top;
 
-    m_hWnd = CreateWindowEx(0U, MAKEINTATOM(app->GetClassHandle()), desc.title.c_str(), 0U, 0, 0, adjustedWith, adjustedHeight, nullptr, nullptr, app->GetInstanceHandle(), app);
+    m_hWnd = CreateWindowEx(WS_EX_CLIENTEDGE, MAKEINTATOM(app->GetClassHandle()), desc.title.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, adjustedWidth, adjustedHeight, nullptr, nullptr, app->GetInstanceHandle(), app);
 
     ShowWindow(m_hWnd, SW_SHOW);
 }
