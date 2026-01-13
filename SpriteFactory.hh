@@ -8,8 +8,6 @@
 
 #include <wrl/client.h>
 
-using namespace Microsoft::WRL;
-
 namespace Lightning3D {
     //class SpriteFactory {
     //public:

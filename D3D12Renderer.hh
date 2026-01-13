@@ -3,7 +3,10 @@
 
 #include "Drawable.hh"
 #include "Sprite.hh"
+#include "Material.hh"
 #include "Matrix.hh"
+#include "ResourcePool.hh" 
+#include "ResourceView.hh"
 #include "Vertex.hh"
 #include "Viewport.hh"
 
@@ -18,19 +21,12 @@
 
 #include <d3d12.h>
 #include <dxgi1_4.h>
-#include <DirectXMath.h>
 
 #include <wrl/client.h>
-
-using namespace Microsoft::WRL;
 
 namespace Lightning3D {
     class Drawable;
     class WindowsWindow;
-
-    struct GPUDescriptor {
-
-    };
 
     struct GPUDescriptorRegion {
         GPUDescriptorRegion() = default;
@@ -46,38 +42,6 @@ namespace Lightning3D {
 
         D3D12_GPU_DESCRIPTOR_HANDLE begin;
         D3D12_GPU_DESCRIPTOR_HANDLE end;
-    };
-
-    template <typename ResourceType>
-    class ResourcePool {
-    public:
-        ResourcePool(uint32_t numResources)
-            : m_numResources(numResources)
-            , m_resources(numResources) {
-
-        }
-
-        auto Request(void) -> ResourceType {
-            assert(m_headIndex - m_tailIndex != m_numResources);
-
-            auto index = m_headIndex++;
-
-            return m_resources[index % m_numResources];
-        }
-
-        auto Release(ResourceType resource) -> void {
-            assert(m_headIndex != m_tailIndex);
-
-            m_resources[m_tailIndex++ % m_numResources] = resource;
-        }
-
-    protected:
-        uint32_t m_numResources;
-
-        uint64_t m_headIndex{ 0u };
-        uint64_t m_tailIndex{ 0u };
-
-        std::vector<ResourceType> m_resources;
     };
 
     class GPUDescriptorPool : public ResourcePool<D3D12_GPU_DESCRIPTOR_HANDLE> {
@@ -108,7 +72,7 @@ namespace Lightning3D {
     private:
         uint32_t m_descriptorHandleIncrementSize;
 
-        ComPtr<ID3D12DescriptorHeap> m_heap;
+        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_heap;
 
         GPUDescriptorRegion m_descriptorRegion;
 
@@ -118,52 +82,11 @@ namespace Lightning3D {
         std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> m_descriptorHandles;
     };
 
-    class ResourceView {
-    public:
-        ResourceView()
-            : m_resourcePool(nullptr) {
-
-        }
-
-        ResourceView(ComPtr<ID3D12Device> device, ComPtr<ID3D12Resource> resourcePool, D3D12_GPU_VIRTUAL_ADDRESS offsetFromHeapStart, uint32_t size)
-            : m_resourcePool(resourcePool)
-            , m_offsetFromHeapStart(offsetFromHeapStart)
-            , m_size(size) {
-
-        }
-
-        auto Map(void) -> void * {
-            if (m_resourcePool == nullptr) {
-                return nullptr;
-            }
-
-            void *mappedPtr = nullptr;
-            m_resourcePool->Map(0u, nullptr, &mappedPtr);
-
-            return static_cast<char *>(mappedPtr) + m_offsetFromHeapStart;
-        }
-
-        auto Unmap(void) -> void {
-            m_resourcePool->Unmap(0u, nullptr);
-        }
-
-        auto GetGPUVirtualAddress(void) const -> D3D12_GPU_VIRTUAL_ADDRESS {
-            return m_resourcePool->GetGPUVirtualAddress() + m_offsetFromHeapStart;
-        }
-
-    protected:
-        ComPtr<ID3D12Resource> m_resourcePool;
-
-        D3D12_GPU_VIRTUAL_ADDRESS m_offsetFromHeapStart = 0u;
-
-        uint32_t m_size = 0u;
-    };
-
     class ConstantBufferView : public ResourceView {
     public:
         ConstantBufferView() = default;
 
-        ConstantBufferView(ComPtr<ID3D12Device> device, ComPtr<ID3D12Resource> cbvPool, D3D12_GPU_VIRTUAL_ADDRESS offsetFromHeapStart, uint32_t size, D3D12_CPU_DESCRIPTOR_HANDLE descriptorHandle)
+        ConstantBufferView(Microsoft::WRL::ComPtr<ID3D12Device> device, Microsoft::WRL::ComPtr<ID3D12Resource> cbvPool, D3D12_GPU_VIRTUAL_ADDRESS offsetFromHeapStart, uint32_t size, D3D12_CPU_DESCRIPTOR_HANDLE descriptorHandle)
             : ResourceView(device, cbvPool, offsetFromHeapStart, size) {
 
             D3D12_CONSTANT_BUFFER_VIEW_DESC desc = { };
@@ -180,7 +103,7 @@ namespace Lightning3D {
     public:
         VertexBufferView() = default;
 
-        VertexBufferView(ComPtr<ID3D12Device> device, ComPtr<ID3D12Resource> vbPool, D3D12_GPU_VIRTUAL_ADDRESS offsetFromHeapStart, uint32_t size, uint32_t stride)
+        VertexBufferView(Microsoft::WRL::ComPtr<ID3D12Device> device, Microsoft::WRL::ComPtr<ID3D12Resource> vbPool, D3D12_GPU_VIRTUAL_ADDRESS offsetFromHeapStart, uint32_t size, uint32_t stride)
             : ResourceView(device, vbPool, offsetFromHeapStart, size)
             , m_stride(stride) {
 
@@ -202,7 +125,7 @@ namespace Lightning3D {
     template <typename ResourceViewType>
     class BufferViewPool : public ResourcePool<ResourceViewType> {
     public:
-        BufferViewPool(ComPtr<ID3D12Device> device, uint32_t numBuffers, uint32_t bufferSize)
+        BufferViewPool(Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t numBuffers, uint32_t bufferSize)
             : ResourcePool<ResourceViewType>(numBuffers) {
 
             HRESULT result;
@@ -234,17 +157,15 @@ namespace Lightning3D {
             if (FAILED(result)) {
                 throw std::runtime_error("Failed to create Buffer Resource: " + std::to_string(result));
             }
-
-
         }
 
     protected:
-        ComPtr<ID3D12Resource> m_resource;
+        Microsoft::WRL::ComPtr<ID3D12Resource> m_resource;
     };
 
     class ConstantBufferViewPool : public BufferViewPool<ConstantBufferView> {
     public:
-        ConstantBufferViewPool(ComPtr<ID3D12Device> device, uint32_t numBuffers, uint32_t bufferSize)
+        ConstantBufferViewPool(Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t numBuffers, uint32_t bufferSize)
             : BufferViewPool(device, numBuffers, (bufferSize + 0xff) & ~0xff) {
             HRESULT result;
 
@@ -270,12 +191,12 @@ namespace Lightning3D {
         }
 
     private:
-        ComPtr<ID3D12DescriptorHeap> m_descriptorHeap;
+        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_descriptorHeap;
     };
 
     class VertexBufferViewPool : public BufferViewPool<VertexBufferView> {
     public:
-        VertexBufferViewPool(ComPtr<ID3D12Device> device, uint32_t numBuffers, uint32_t bufferSize, uint32_t bufferStride)
+        VertexBufferViewPool(Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t numBuffers, uint32_t bufferSize, uint32_t bufferStride)
             : BufferViewPool(device, numBuffers, bufferSize) {
 
             for (size_t index = 0u; index < m_numResources; ++index) {
@@ -300,7 +221,7 @@ namespace Lightning3D {
             m_graphicsCommandList->Reset(m_commandAllocator.Get(), m_pipelineState.Get());
 
             m_graphicsCommandList->SetGraphicsRootSignature(rootSignature);
-            
+
             D3D12_RESOURCE_BARRIER barrier;
             barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
             barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
@@ -312,29 +233,28 @@ namespace Lightning3D {
 
             auto rtvDescriptor = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
             rtvDescriptor.ptr += m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV) * m_frameIndex;
-            m_graphicsCommandList->OMSetRenderTargets(1U, &rtvDescriptor, false, nullptr);
+
+            auto dsDescriptor = m_dsDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+
+            m_graphicsCommandList->OMSetRenderTargets(1U, &rtvDescriptor, false, &dsDescriptor);
 
             const float clearColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
             //const float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
             m_graphicsCommandList->ClearRenderTargetView(rtvDescriptor, clearColor, 0u, nullptr);
 
+            m_graphicsCommandList->ClearDepthStencilView(m_dsDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0u, 0u, nullptr);
+
             m_viewport = viewport;
 
             m_viewport->PreRender(m_graphicsCommandList.Get());
 
-            //ID3D12DescriptorHeap *descriptorHeaps[] = { m_cbvPool->GetDescriptorHeap() };
-            //m_graphicsCommandList->SetDescriptorHeaps(1u, descriptorHeaps);
-
-            //auto x = m_cbvPool->GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
-
-            //m_graphicsCommandList->SetGraphicsRootDescriptorTable(0u, m_cbvPool->GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 
         }
 
         auto Render(void) -> void;
 
-        auto Draw(Drawable &drawable, ID3D12PipelineState *pipelineState) -> void;
+        auto Draw(const std::vector<Vertex> &vertices, const Mat4x4 &worldTransform, Material *material, ID3D12PipelineState *pipelineState) -> void;
 
         auto GetDevice(void) const -> Microsoft::WRL::ComPtr<ID3D12Device> {
             return m_device;
@@ -344,7 +264,7 @@ namespace Lightning3D {
             return m_graphicsCommandList;
         }
 
-        auto GetRootSignature(void) const -> ComPtr<ID3D12RootSignature> {
+        auto GetRootSignature(void) const ->  Microsoft::WRL::ComPtr<ID3D12RootSignature> {
             return m_rootSignature;
         }
 
@@ -363,6 +283,7 @@ namespace Lightning3D {
         }
 
     private:
+        Microsoft::WRL::ComPtr<ID3D12Debug> m_debugController;
         Microsoft::WRL::ComPtr<ID3D12Device> m_device;
         Microsoft::WRL::ComPtr<ID3D12CommandQueue> m_commandQueue;
         Microsoft::WRL::ComPtr<IDXGISwapChain3> m_swapChain;
@@ -370,6 +291,8 @@ namespace Lightning3D {
         Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargets[2u];
         Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_cbDescriptorHeap;
         Microsoft::WRL::ComPtr<ID3D12Resource> m_cbs[2u];
+        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_dsDescriptorHeap;
+        Microsoft::WRL::ComPtr<ID3D12Resource> m_depthStencilBuffer;
         Microsoft::WRL::ComPtr<ID3D12CommandAllocator> m_commandAllocator;
         Microsoft::WRL::ComPtr<ID3D12RootSignature> m_rootSignature;
         Microsoft::WRL::ComPtr<ID3D12PipelineState> m_pipelineState;
@@ -392,12 +315,10 @@ namespace Lightning3D {
 
     class BatchedDraw : public Drawable {
     public:
-        BatchedDraw(ComPtr<ID3D12Device> device, uint32_t vbSizeHint)
+        BatchedDraw(Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t vbSizeHint)
             : m_device(device) {
 
             m_vertices.reserve(vbSizeHint / sizeof(Vertex));
-
-            //AllocateVertexBuffer(vbSizeHint);
         }
 
         ~BatchedDraw() {
@@ -465,41 +386,9 @@ namespace Lightning3D {
         }
 
     private:
-        //auto AllocateVertexBuffer(uint32_t size) -> void {
-        //    HRESULT result;
+        Microsoft::WRL::ComPtr<ID3D12Device> m_device;
 
-        //    D3D12_HEAP_PROPERTIES heapProperties = { };
-        //    heapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-
-        //    D3D12_RESOURCE_DESC vertexBufferDesc = { };
-        //    vertexBufferDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-        //    vertexBufferDesc.Alignment = 0u;
-        //    vertexBufferDesc.Width = size;
-        //    vertexBufferDesc.Height = 1u;
-        //    vertexBufferDesc.DepthOrArraySize = 1u;
-        //    vertexBufferDesc.MipLevels = 1u;
-        //    vertexBufferDesc.Format = DXGI_FORMAT_UNKNOWN;
-        //    vertexBufferDesc.SampleDesc.Count = 1u;
-        //    vertexBufferDesc.SampleDesc.Quality = 0u;
-        //    vertexBufferDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-        //    vertexBufferDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
-
-        //    result = m_device->CreateCommittedResource(
-        //        &heapProperties,
-        //        D3D12_HEAP_FLAG_NONE,
-        //        &vertexBufferDesc,
-        //        D3D12_RESOURCE_STATE_GENERIC_READ,
-        //        nullptr,
-        //        IID_PPV_ARGS(&m_vertexBuffer));
-        //    if (FAILED(result)) {
-        //        throw std::runtime_error("Failed to create Vertex Buffer Resource: " + std::to_string(result));
-        //    }
-        //}
-
-    private:
-        ComPtr<ID3D12Device> m_device;
-
-        ComPtr<ID3D12Resource> m_vertexBuffer;
+        Microsoft::WRL::ComPtr<ID3D12Resource> m_vertexBuffer;
 
         D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
 

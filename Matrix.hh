@@ -140,8 +140,8 @@ namespace Lightning3D {
         return {
             scale, 0.0f,  0.0f, 0.0f,
             0.0f,  scale, 0.0f,                            0.0f,
-            0.0f,  0.0f, -farZ / (farZ - nearZ),          -1.0f,
-            0.0f,  0.0f, -(farZ * nearZ) / (farZ - nearZ), 0.0f
+            0.0f,  0.0f, farZ / (farZ - nearZ),           1.0f,
+            0.0f,  0.0f, -farZ * nearZ / (farZ - nearZ), 0.0f
         };
     }
 
@@ -154,14 +154,15 @@ namespace Lightning3D {
         };
     }
 
-    inline auto MatrixRotationAxis(const Vec3F &axis, float angle) -> Mat3x3 {
+    inline auto MatrixRotationAxis(const Vec3F &axis, float angle) -> Mat4x4 {
         const auto cos = std::cosf(angle);
         const auto sin = std::sinf(angle);
 
         return {
-            cos + Square(axis.x) * (1.0f - cos), axis.x * axis.y * (1 - cos) - axis.z * sin, axis.x * axis.z * (1 - cos) - axis.y * sin,
-            axis.y * axis.x * (1.0f - cos) + axis.z * sin, cos + Square(axis.y) * (1.0f - cos), axis.y * axis.x * (1.0f - cos) - axis.x * cos,
-            axis.z * axis.x * (1.0f - cos) - axis.y * sin, axis.z * axis.y * (1.0f - cos) + axis.x * sin, cos + Square(axis.z) * (1.0f - cos)
+            cos + Square(axis.x) * (1.0f - cos), axis.x * axis.y * (1 - cos) - axis.z * sin, axis.x * axis.z * (1 - cos) - axis.y * sin, 0.0f,
+            axis.y * axis.x * (1.0f - cos) + axis.z * sin, cos + Square(axis.y) * (1.0f - cos), axis.y * axis.x * (1.0f - cos) - axis.x * cos, 0.0f,
+            axis.z * axis.x * (1.0f - cos) - axis.y * sin, axis.z * axis.y * (1.0f - cos) + axis.x * sin, cos + Square(axis.z) * (1.0f - cos), 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
         };
     }
 

@@ -4,6 +4,7 @@
 #include "InputModifier.hh"
 
 #include <cstdint>
+#include <iostream>
 
 namespace Lightning3D {
     enum struct Key : uint32_t {
@@ -144,6 +145,7 @@ namespace Lightning3D {
         }
 
         virtual auto OnMouseMove(int32_t x, int32_t y, InputModifier modifiers) -> bool {
+        std::cout << "X=" << x << ", Y=" << y << std::endl;
             return false;
         }
 

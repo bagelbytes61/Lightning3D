@@ -9,6 +9,7 @@
 #include "Vector.hh"
 #include "InputBuffer.hh"
 
+#include "Games/Asteroids3D/Asteroids3D.hh"
 #include "Games/Filler/Filler.hh"
 
 #include <chrono>
@@ -85,8 +86,6 @@ using namespace Lightning3D;
 #include <thread>
 
 int main(int argc, char *argv[]) {
-    //SpriteFactory sf(NULL);
-
     try {
         auto app = Lightning3D::WindowsApp();
 
@@ -100,9 +99,11 @@ int main(int argc, char *argv[]) {
 
         auto renderer = Lightning3D::D3D12Renderer(&window);
 
-        auto filler = Lightning3D::Games::Filler::Filler(renderer.GetDevice(), Vec2I(window_desc.width, window_desc.height));
+        auto game = Lightning3D::Games::Filler::Filler(renderer.GetDevice(), Vec2I(window_desc.width, window_desc.height));
 
-        app.SetMessageHandler(&filler);
+        //auto game = Lightning3D::Games::Asteroids3D::Asteroids3D(renderer.GetDevice(), Vec2I(window_desc.width, window_desc.height));
+
+        app.SetMessageHandler(&game);
             
         renderer.WaitForPreviousFrame();
 
@@ -111,7 +112,7 @@ int main(int argc, char *argv[]) {
         auto last = now;
         while (true) {
             app.Run();
-            filler.Draw(renderer);
+            game.Draw(renderer);
             frame_counter += 1;
             now = std::chrono::high_resolution_clock::now();
             if (now - last > std::chrono::seconds(1)) {

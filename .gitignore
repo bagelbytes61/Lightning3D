@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Games/Asteroids3D/Asteroids3D.hh
+/Bitmap.hh

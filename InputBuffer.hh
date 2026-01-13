@@ -82,8 +82,6 @@ namespace Lightning3D {
 
                     }
                 }
-
-
             }
 
             m_containsEvents = false;
@@ -91,10 +89,10 @@ namespace Lightning3D {
             return *this;
         }
 
-        auto Consume(/*std::chrono::microseconds duration*/) -> bool {
-            //while (m_inputEvents.front().stamp - m_time >= duration) {
-            //    m_inputEvents.pop_front();
-            //}
+        auto Consume(std::chrono::microseconds duration) -> bool {
+            while (m_inputEvents.front().stamp - m_time >= duration) {
+                m_inputEvents.pop_front();
+            }
 
             return m_containsEvents;
         }

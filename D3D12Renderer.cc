@@ -1,6 +1,7 @@
 #include "D3D12Renderer.hh"
 #include "Sprite.hh"
 
+#include "Material.hh"
 #include "Matrix.hh"
 #include "WindowsWindow.hh"
 
@@ -14,18 +15,15 @@
 
 using namespace Lightning3D;
 
-Microsoft::WRL::ComPtr<ID3D12Debug> debugController;
-
-
 D3D12Renderer::D3D12Renderer(const WindowsWindow *window) {
     HRESULT result;
 
-    result = D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
+    result = D3D12GetDebugInterface(IID_PPV_ARGS(&m_debugController));
     if (FAILED(result)) {
         throw std::runtime_error("Failed to acquire D3D12 Debug Interface: " + std::to_string(result));
     }
 
-    debugController->EnableDebugLayer();
+    m_debugController->EnableDebugLayer();
 
     Microsoft::WRL::ComPtr<IDXGIFactory4> factory;
 
@@ -82,8 +80,6 @@ D3D12Renderer::D3D12Renderer(const WindowsWindow *window) {
         desc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
         desc.Flags = 0U;
 
-        //DXGI_SWAP_CHAIN_FULLSCREEN_DESC fullscreenDesc = { };
-
         result = factory->CreateSwapChainForHwnd(m_commandQueue.Get(), window->GetHandle(), &desc, nullptr, nullptr, &swapChain);
         if (FAILED(result)) {
             throw std::runtime_error("Failed to create Swap Chain: " + std::to_string(result));
@@ -134,44 +130,56 @@ D3D12Renderer::D3D12Renderer(const WindowsWindow *window) {
         }
     }
 
-    //auto mat = DirectX::XMMatrixIdentity();
+    {
+        D3D12_DESCRIPTOR_HEAP_DESC desc = { };
+        desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+        desc.NumDescriptors = 1u;
+        desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
-    //auto mat0 = Translation(0.0f, 0.0f, 0.0f);
-    //auto mat1 = DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f);
+        result = m_device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_dsDescriptorHeap));
+        if (FAILED(result)) {
+            throw std::runtime_error("Failed to create DSV Descriptor Heap: " + std::to_string(result));
+        }
+    }
 
-    //mat1 = mat1 * DirectX::XMMatrixLookAtLH({0.0f, 0.0f, -10.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}) * DirectX::XMMatrixOrthographicLH(768.0f, 768.0f, 0.1f, 1000.0f);
+    {
+        D3D12_HEAP_PROPERTIES heapProperties = { };
+        heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
 
-    //mat0 = mat0 * LookAtLH({ 0.0f, 0.0f, -10.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }) * OrthographicLH(768.0f, 768.0f, 0.1f, 1000.0f);
+        D3D12_RESOURCE_DESC resourceDesc = { };
+        resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+        resourceDesc.Alignment = 0u;
+        resourceDesc.Width = window->GetWidth();
+        resourceDesc.Height = window->GetHeight();
+        resourceDesc.DepthOrArraySize = 1u;
+        resourceDesc.MipLevels = 0u;
+        resourceDesc.Format = DXGI_FORMAT_D32_FLOAT;
+        resourceDesc.SampleDesc.Count = 1u;
+        resourceDesc.SampleDesc.Quality = 0u;
+        resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+        resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
-    //    //const auto position = drawable.GetPosition();
-    //const auto world = Translation(0.0f, 0.0f, 0.0f);
+        D3D12_CLEAR_VALUE clearValue = { };
+        clearValue.Format = DXGI_FORMAT_D32_FLOAT;
+        clearValue.DepthStencil.Depth = 1.0f;
+        clearValue.DepthStencil.Stencil = 0u;
 
-    //const auto wvp = world * LookAtLH({ 0.0f, 0.0f, -10.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }) * OrthographicLH(768.0f, 768.0f, 0.1f, 1000.0f);
+        result = m_device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &clearValue, IID_PPV_ARGS(&m_depthStencilBuffer));
+        if (FAILED(result)) {
+            throw std::runtime_error("Failed to create Depth Stencil Buffer Resource: " + std::to_string(result));
+        }
+    }
 
-    ////{
-    ////    D3D12_RANGE readRange = { };
-    ////    void *mappedCbPtr = nullptr;
-
-    ////    const auto result = m_cbs[0]->Map(0u, &readRange, &mappedCbPtr);
-    ////    if (FAILED(result)) {
-    ////        throw std::runtime_error(std::to_string(result));
-    ////    }
-    ////    memcpy(mappedCbPtr, &wvp, sizeof(wvp));
-    ////    m_cbs[0]->Unmap(0u, nullptr);
-    ////}
-
-    //{
-    //    D3D12_RANGE readRange = { };
-    //    void *mappedCbPtr = nullptr;
-
-    //    result = m_cbs[0]->Map(0u, &readRange, &mappedCbPtr);
-    //    if (FAILED(result)) {
-    //        throw std::runtime_error(std::to_string(result));
-    //    }
-    //    memcpy(mappedCbPtr, &mat0, sizeof(mat0));
-    //    m_cbs[0]->Unmap(0u, nullptr);
-    //}
-
+    {
+        D3D12_DEPTH_STENCIL_VIEW_DESC desc = { };
+        desc.Format = DXGI_FORMAT_D32_FLOAT;
+        desc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+        desc.Flags = D3D12_DSV_FLAG_NONE;
+        desc.Texture2D.MipSlice = 0u;
+    
+        m_device->CreateDepthStencilView(m_depthStencilBuffer.Get(), &desc, m_dsDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
+    }
+    
     result = m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocator));
     if (FAILED(result)) {
         throw std::runtime_error("Failed to create Command Allocator: " + std::to_string(result));
@@ -240,7 +248,7 @@ auto D3D12Renderer::Render(void) -> void {
     vbvs.clear();
 }
 
-auto D3D12Renderer::Draw(Drawable &drawable, ID3D12PipelineState *pipelineState) -> void {
+auto D3D12Renderer::Draw(const std::vector<Vertex> &vertices, const Mat4x4 &worldTransform, Material *material, ID3D12PipelineState *pipelineState) -> void {
     assert(m_viewport != nullptr);
 
     const auto camera = m_viewport->GetCamera();
@@ -248,8 +256,6 @@ auto D3D12Renderer::Draw(Drawable &drawable, ID3D12PipelineState *pipelineState)
     assert(camera != nullptr);
 
     m_graphicsCommandList->SetPipelineState(pipelineState);
-
-    const auto &vertices = drawable.GetVertices();
 
     auto vbv = m_vbvPool->Request();
 
@@ -263,15 +269,11 @@ auto D3D12Renderer::Draw(Drawable &drawable, ID3D12PipelineState *pipelineState)
 
     m_inflightVBVs[m_frameIndex].push_back(vbv);
 
-    if (auto material = drawable.GetMaterial(); material != nullptr) {
-        const auto position = drawable.GetPosition();
-        const auto scale = drawable.GetScale();
-
-        const auto world = MatrixScale(scale.x, scale.y, 1.0f) * MatrixTranslation(position.x, position.y, 0.0f);
+    if (material != nullptr) { 
         const auto view = camera->GetViewMatrix();
         const auto projection = camera->GetProjectionMatrix();
 
-        const auto wvp = world * *reinterpret_cast<const Mat4x4 *>(&view) * projection;
+        const auto wvp = worldTransform * view * projection;
 
         material->SetMat4x4Variable("LIGHTNING3D_MATRIX_WVP", wvp.Transpose());
 
@@ -319,28 +321,10 @@ auto D3D12Renderer::Draw(Drawable &drawable, ID3D12PipelineState *pipelineState)
         }
     }
 
-
     m_graphicsCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     const D3D12_VERTEX_BUFFER_VIEW vbs[] = { vbv.GetView() };
 
     m_graphicsCommandList->IASetVertexBuffers(0u, 1u, vbs);
-    m_graphicsCommandList->DrawInstanced(drawable.GetVertexCount(), 1u, 0u, 0u);
+    m_graphicsCommandList->DrawInstanced(vertices.size(), 1u, 0u, 0u);
 }
-
-//const auto view = DirectX::XMMatrixLookAtLH({ 0.0f, 0.0f, -100.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
-//const auto projection = DirectX::XMMatrixOrthographicLH(768.0f, 768.0f, 0.1f, 1000.0f);
-
-
-
-
-//LIGHTNING3D_MATRIX_WVP.row0 cb0[0].x, cb0[1].x, cb0[2].x, cb0[3].x float4x4 - 4.99609, 5.00,    0.00,    5.00
-//LIGHTNING3D_MATRIX_WVP.row1 cb0[0].y, cb0[1].y, cb0[2].y, cb0[3].y float4x4   0.00,   -0.03125, 0.00,    0.00
-//LIGHTNING3D_MATRIX_WVP.row2 cb0[0].z, cb0[1].z, cb0[2].z, cb0[3].z float4x4   0.00,    0.00,    0.00995, 0.00
-//LIGHTNING3D_MATRIX_WVP.row3 cb0[0].w, cb0[1].w, cb0[2].w, cb0[3].w float4x4 - 1.00,    1.00,    0.00,    1.00
-//
-//
-//LIGHTNING3D_MATRIX_WVP.row0 cb0[0].x, cb0[1].x, cb0[2].x, cb0[3].x float4x4  0.00391, 0.00,    0.00,    0.00
-//LIGHTNING3D_MATRIX_WVP.row1 cb0[0].y, cb0[1].y, cb0[2].y, cb0[3].y float4x4  0.00,   -0.03125, 0.00,    0.00
-//LIGHTNING3D_MATRIX_WVP.row2 cb0[0].z, cb0[1].z, cb0[2].z, cb0[3].z float4x4  0.00,    0.00,    0.00995, 0.00
-//LIGHTNING3D_MATRIX_WVP.row3 cb0[0].w, cb0[1].w, cb0[2].w, cb0[3].w float4x4 -1.00,    1.00,    0.00,    1.00
